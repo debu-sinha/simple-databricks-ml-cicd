@@ -8,6 +8,12 @@ on:
 env:
 #these will be different for your environment
   PROJECT_NAME: simple-databricks-ml-cicd
+  DEV_DATABRICKS_TOKEN: ${{ secrets.DEV_DATABRICKS_TOKEN }}
+  DEV_DATABRICKS_HOST: ${{ secrets.DEV_DATABRICKS_HOST }}
+  QA_DATABRICKS_TOKEN: ${{ secrets.QA_DATABRICKS_TOKEN }}
+  QA_DATABRICKS_HOST: ${{ secrets.QA_DATABRICKS_HOST }}
+  PROD_DATABRICKS_TOKEN: ${{ secrets.PROD_DATABRICKS_TOKEN }}
+  PROD_DATABRICKS_HOST: ${{ secrets.PROD_DATABRICKS_HOST }}
 
 jobs:
   build:
@@ -26,11 +32,8 @@ jobs:
         databricks --version  # Verify the installation
         
     - name: setup a dev databricks cli config file
-      env :
-        DATABRICKS_TOKEN: ${{ secrets.DEV_DATABRICKS_TOKEN }}
-        DATABRICKS_HOST: ${{ secrets.DEV_DATABRICKS_HOST }}
       run: |
-        echo "${{ env.DATABRICKS_HOST}}" | databricks configure --token ${{ env.DATABRICKS_TOKEN }} --profile DEV
+        echo "${{ env.DEV_DATABRICKS_HOST}}" | databricks configure --token ${{ env.DEV_DATABRICKS_TOKEN }} --profile DEV
 
     - name: Dev Workspace Deployment
       run: |
@@ -41,12 +44,9 @@ jobs:
 
         # Additional commands for running Dev workspace tests, etc.
 
-     - name: setup a qa databricks cli config file
-      env :
-        DATABRICKS_TOKEN: ${{ secrets.QA_DATABRICKS_TOKEN }}
-        DATABRICKS_HOST: ${{ secrets.QA_DATABRICKS_HOST }}
+    - name: setup a qa databricks cli config file
       run: |
-        echo "${{ env.DATABRICKS_HOST}}" | databricks configure --token ${{ env.DATABRICKS_TOKEN }} --profile QA    
+        echo "${{ env.QA_DATABRICKS_HOST}}" | databricks configure --token ${{ env.QA_DATABRICKS_TOKEN }} --profile QA    
 
     - name: QA Workspace Deployment
       run: |
@@ -58,11 +58,8 @@ jobs:
         # Additional commands for running QA workspace tests, etc.
 
       - name: setup a PROD databricks cli config file
-      env :
-        DATABRICKS_TOKEN: ${{ secrets.PROD_DATABRICKS_TOKEN }}
-        DATABRICKS_HOST: ${{ secrets.PROD_DATABRICKS_HOST }}
       run: |
-        echo "${{ env.DATABRICKS_HOST}}" | databricks configure --token ${{ env.DATABRICKS_TOKEN }} --profile PROD  
+        echo "${{ env.PROD_DATABRICKS_HOST}}" | databricks configure --token ${{ env.PROD_DATABRICKS_TOKEN }} --profile PROD  
 
     - name: Prod Workspace Deployment
       run: |
