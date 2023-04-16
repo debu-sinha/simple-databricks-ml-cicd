@@ -24,11 +24,16 @@ jobs:
       run: |
         pip install databricks-cli  # Install Databricks CLI
         databricks --version  # Verify the installation
+        
+    - name: setup a dev databricks cli config file
+      env :
+        DATABRICKS_TOKEN: ${{ secrets.DEV_DATABRICKS_TOKEN }}
+        DATABRICKS_HOST: ${{ secrets.DEV_DATABRICKS_HOST }}
+      run: |
+        echo "${{ DATABRICKS_HOST}}" | databricks configure --token ${{ DATABRICKS_TOKEN }} --profile DEV
 
     - name: Dev Workspace Deployment
       run: |
-        databricks configure --token ${{ secrets.DEV_DATABRICKS_TOKEN }} --host ${{ secrets.QA_DATABRICKS_HOST}} --profile DEV
-      
         databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev
 
         # Do this only if you use Databrics notebooks
@@ -36,10 +41,15 @@ jobs:
 
         # Additional commands for running Dev workspace tests, etc.
 
+     - name: setup a qa databricks cli config file
+      env :
+        DATABRICKS_TOKEN: ${{ secrets.QA_DATABRICKS_TOKEN }}
+        DATABRICKS_HOST: ${{ secrets.QA_DATABRICKS_HOST }}
+      run: |
+        echo "${{ DATABRICKS_HOST}}" | databricks configure --token ${{ DATABRICKS_TOKEN }} --profile QA    
+
     - name: QA Workspace Deployment
       run: |
-        databricks configure --token ${{ secrets.QA_DATABRICKS_TOKEN }} --host ${{ secrets.QA_DATABRICKS_HOST}} --profile QA
-      
         databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa
         
         # Do this only if you use Databrics notebooks
@@ -47,11 +57,15 @@ jobs:
 
         # Additional commands for running QA workspace tests, etc.
 
+      - name: setup a PROD databricks cli config file
+      env :
+        DATABRICKS_TOKEN: ${{ secrets.PROD_DATABRICKS_TOKEN }}
+        DATABRICKS_HOST: ${{ secrets.PROD_DATABRICKS_HOST }}
+      run: |
+        echo "${{ DATABRICKS_HOST}}" | databricks configure --token ${{ DATABRICKS_TOKEN }} --profile PROD  
+
     - name: Prod Workspace Deployment
       run: |
-
-        databricks configure --token ${{ secrets.PROD_DATABRICKS_TOKEN }} --host ${{ secrets.PROD_DATABRICKS_HOST}} --profile PROD
-
         databricks repos update --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main
         # Do this only if you use Databrics notebooks
         #databricks workspace import_dir -o . /Workspace/Shared/PROD/${{ env.PROJECT_NAME}} --profile PROD # Import code to Prod workspace
