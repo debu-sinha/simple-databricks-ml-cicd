@@ -57,7 +57,7 @@ jobs:
 
         # Additional commands for running QA workspace tests, etc.
 
-      - name: setup a PROD databricks cli config file
+    - name: setup a PROD databricks cli config file
       run: |
         echo "${{ env.PROD_DATABRICKS_HOST}}" | databricks configure --token ${{ env.PROD_DATABRICKS_TOKEN }} --profile PROD  
 
