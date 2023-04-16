@@ -8,12 +8,6 @@ on:
 env:
 #these will be different for your environment
   PROJECT_NAME: simple-databricks-ml-cicd
-  DEV_DATABRICKS_TOKEN: ${{ secrets.DEV_DATABRICKS_TOKEN }}
-  DEV_DATABRICKS_URL: ${{ secrets.DEV_DATABRICKS_HOST }}
-  QA_DATABRICKS_TOKEN: ${{ secrets.QA_DATABRICKS_TOKEN }}
-  QA_DATABRICKS_URL: ${{ secrets.QA_DATABRICKS_HOST }}
-  PROD_DATABRICKS_TOKEN: ${{ secrets.PROD_DATABRICKS_TOKEN }}
-  PROD_DATABRICKS_URL: ${{ secrets.PROD_DATABRICKS_HOST }}
 
 jobs:
   build:
@@ -33,18 +27,30 @@ jobs:
 
     - name: Dev Workspace Deployment
       run: |
-        databricks configure --token ${{ env.DEV_DATABRICKS_TOKEN }} --url ${{ env.DEV_DATABRICKS_HOST}}  # Configure Databricks CLI with Dev workspace credentials
-        databricks workspace import_dir . /Repos/DEV/${{ env.PROJECT_NAME}}  # Import code to Dev workspace
+        echo "[DEV]">>~/.databrickscfg  # Create a new profile for Dev workspace
+        echo "host = ${{ secrets.DEV_DATABRICKS_HOST}}">> ~/.databrickscfg  # Add Dev workspace host to the profile
+        echo "token = ${{ secrets.DEV_DATABRICKS_TOKEN }}">> ~/.databrickscfg   
+        echo " " >> ~/.databrickscfg  # Add Dev workspace token to the profile        
+        
+        databricks workspace import_dir . /Repos/DEV/${{ env.PROJECT_NAME}} --profile DEV  # Import code to Dev workspace
         # Additional commands for running Dev workspace tests, etc.
 
     - name: QA Workspace Deployment
       run: |
-        databricks configure --token ${{ env.QA_DATABRICKS_TOKEN }} --url ${{ env.QA_DATABRICKS_HOST}}  # Configure Databricks CLI with QA workspace credentials
-        databricks workspace import_dir . /Repos/QA/${{ env.PROJECT_NAME}}  # Import code to QA workspace
+        echo "[QA]">>~/.databrickscfg  # Create a new profile for QA workspace
+        echo "host = ${{ secrets.QA_DATABRICKS_HOST}}">>~/.databrickscfg  # Add Dev workspace host to the profile
+        echo "token = ${{ secrets.QA_DATABRICKS_TOKEN }}">>~/.databrickscfg   
+        echo " " >>~/.databrickscfg  # Add Dev workspace token to the profile  
+
+        databricks workspace import_dir . /Repos/QA/${{ env.PROJECT_NAME}} --profile QA # Import code to QA workspace
         # Additional commands for running QA workspace tests, etc.
 
     - name: Prod Workspace Deployment
       run: |
-        databricks configure --token ${{ env.PROD_DATABRICKS_TOKEN }} --url ${{ env.PROD_DATABRICKS_HOST}}  # Configure Databricks CLI with Prod workspace credentials
+        echo "[PROD]">>~/.databrickscfg  # Create a new profile for PROD workspace
+        echo "host = ${{ secrets.PROD_DATABRICKS_HOST}}">> ~/.databrickscfg  # Add Dev workspace host to the profile
+        echo "token = ${{ secrets.PROD_DATABRICKS_TOKEN }}">> ~/.databrickscfg   
+        echo " " >> ~/.databrickscfg  
+
         databricks workspace import_dir . /Repos/PROD/${{ env.PROJECT_NAME}} # Import code to Prod workspace
         # Additional commands for running Prod workspace tests, etc.
