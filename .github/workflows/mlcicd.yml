@@ -27,11 +27,9 @@ jobs:
 
     - name: Dev Workspace Deployment
       run: |
-        echo "[DEV]">>~/.databrickscfg  # Create a new profile for Dev workspace
-        echo "host = ${{ secrets.DEV_DATABRICKS_HOST}}">> ~/.databrickscfg  # Add Dev workspace host to the profile
-        echo "token = ${{ secrets.DEV_DATABRICKS_TOKEN }}">> ~/.databrickscfg   
-        echo " " >> ~/.databrickscfg  # Add Dev workspace token to the profile        
-        cat ~/.databrickscfg  # Verify the profile
+        echo "${{ secrets.DEV_DATABRICKS_HOST}}
+        ${{ secrets.DEV_DATABRICKS_TOKEN }}" | databricks configure --token --profile DEV
+      
         databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev
 
         # Do this only if you use Databrics notebooks
@@ -41,13 +39,11 @@ jobs:
 
     - name: QA Workspace Deployment
       run: |
-
-        echo "[QA]">>~/.databrickscfg  # Create a new profile for QA workspace
-        echo "host = ${{ secrets.QA_DATABRICKS_HOST}}">>~/.databrickscfg  # Add Dev workspace host to the profile
-        echo "token = ${{ secrets.QA_DATABRICKS_TOKEN }}">>~/.databrickscfg   
-        echo " " >>~/.databrickscfg  # Add Dev workspace token to the profile  
-
+        echo "${{ secrets.QA_DATABRICKS_HOST}}
+        ${{ secrets.QA_DATABRICKS_TOKEN }}" | databricks configure --token --profile QA
+      
         databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa
+        
         # Do this only if you use Databrics notebooks
         #databricks workspace import_dir -o . /Workspace/Shared/QA/${{ env.PROJECT_NAME}} --profile QA # Import code to QA workspace
 
@@ -56,10 +52,8 @@ jobs:
     - name: Prod Workspace Deployment
       run: |
 
-        echo "[PROD]">>~/.databrickscfg  # Create a new profile for PROD workspace
-        echo "host = ${{ secrets.PROD_DATABRICKS_HOST}}">> ~/.databrickscfg  # Add Dev workspace host to the profile
-        echo "token = ${{ secrets.PROD_DATABRICKS_TOKEN }}">> ~/.databrickscfg   
-        echo " " >> ~/.databrickscfg  
+        echo "${{ secrets.PROD_DATABRICKS_HOST}}
+        ${{ secrets.PROD_DATABRICKS_TOKEN }}" | databricks configure --token --profile PROD
 
         databricks repos update --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main
         # Do this only if you use Databrics notebooks
