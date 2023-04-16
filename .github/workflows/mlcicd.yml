@@ -32,7 +32,7 @@ jobs:
         echo "token = ${{ secrets.DEV_DATABRICKS_TOKEN }}">> ~/.databrickscfg   
         echo " " >> ~/.databrickscfg  # Add Dev workspace token to the profile        
         
-        databricks workspace import_dir . /Repos/DEV/${{ env.PROJECT_NAME}} --profile DEV  # Import code to Dev workspace
+        databricks workspace import_dir -o . /Workspace/Shared/DEV/${{ env.PROJECT_NAME}} --profile DEV  # Import code to Dev workspace
 
         # Additional commands for running Dev workspace tests, etc.
 
@@ -44,7 +44,7 @@ jobs:
         echo "token = ${{ secrets.QA_DATABRICKS_TOKEN }}">>~/.databrickscfg   
         echo " " >>~/.databrickscfg  # Add Dev workspace token to the profile  
 
-        databricks workspace import_dir . /Repos/QA/${{ env.PROJECT_NAME}} --profile QA # Import code to QA workspace
+        databricks workspace import_dir -o . /Workspace/Shared/QA/${{ env.PROJECT_NAME}} --profile QA # Import code to QA workspace
 
         # Additional commands for running QA workspace tests, etc.
 
@@ -56,5 +56,5 @@ jobs:
         echo "token = ${{ secrets.PROD_DATABRICKS_TOKEN }}">> ~/.databrickscfg   
         echo " " >> ~/.databrickscfg  
 
-        databricks workspace import_dir . /Repos/PROD/${{ env.PROJECT_NAME}} # Import code to Prod workspace
+        databricks workspace import_dir -o . /Workspace/Shared/PROD/${{ env.PROJECT_NAME}} # Import code to Prod workspace
         # Additional commands for running Prod workspace tests, etc.
