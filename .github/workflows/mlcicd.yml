@@ -27,8 +27,7 @@ jobs:
 
     - name: Dev Workspace Deployment
       run: |
-        echo "${{ secrets.DEV_DATABRICKS_HOST}}
-        ${{ secrets.DEV_DATABRICKS_TOKEN }}" | databricks configure --token --profile DEV
+        databricks configure --token ${{ secrets.DEV_DATABRICKS_TOKEN }} --host ${{ secrets.QA_DATABRICKS_HOST}} --profile DEV
       
         databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev
 
@@ -39,8 +38,7 @@ jobs:
 
     - name: QA Workspace Deployment
       run: |
-        echo "${{ secrets.QA_DATABRICKS_HOST}}
-        ${{ secrets.QA_DATABRICKS_TOKEN }}" | databricks configure --token --profile QA
+        databricks configure --token ${{ secrets.QA_DATABRICKS_TOKEN }} --host ${{ secrets.QA_DATABRICKS_HOST}} --profile QA
       
         databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa
         
@@ -52,8 +50,7 @@ jobs:
     - name: Prod Workspace Deployment
       run: |
 
-        echo "${{ secrets.PROD_DATABRICKS_HOST}}
-        ${{ secrets.PROD_DATABRICKS_TOKEN }}" | databricks configure --token --profile PROD
+        databricks configure --token ${{ secrets.PROD_DATABRICKS_TOKEN }} --host ${{ secrets.PROD_DATABRICKS_HOST}} --profile PROD
 
         databricks repos update --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main
         # Do this only if you use Databrics notebooks
