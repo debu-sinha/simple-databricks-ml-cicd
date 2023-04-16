@@ -28,7 +28,7 @@ jobs:
 
     - name: Install Databricks CLI
       run: |
-        pip install databricks-cli==0.11  # Install Databricks CLI
+        pip install databricks-cli==0.12  # Install Databricks CLI
         databricks --version  # Verify the installation
         
     - name: Update dev branch code
