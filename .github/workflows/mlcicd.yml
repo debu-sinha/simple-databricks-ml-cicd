@@ -28,14 +28,13 @@ jobs:
 
     - name: Install Databricks CLI
       run: |
-        pip install databricks-cli  # Install Databricks CLI
+        pip install databricks-cli==0.11  # Install Databricks CLI
         databricks --version  # Verify the installation
         
     - name: Update dev branch code
       run: |
-        echo "[DEV]
-        ${{ env.DEV_DATABRICKS_HOST}} 
-        ${{ env.DEV_DATABRICKS_TOKEN }}">>~/.databrickscfg
+        echo "${{ env.DEV_DATABRICKS_HOST}} 
+        ${{ env.DEV_DATABRICKS_TOKEN }}" | databricks configure --token --profile DEV
         databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev
 
         # Do this only if you use Databrics notebooks
@@ -44,9 +43,8 @@ jobs:
 
     - name: setup a qa databricks cli config file
       run: |
-        echo "[QA]
-        ${{ env.QA_DATABRICKS_HOST}}
-        ${{ env.QA_DATABRICKS_TOKEN }}">>~/.databrickscfg   
+        echo "${{ env.QA_DATABRICKS_HOST}}
+        ${{ env.QA_DATABRICKS_TOKEN }}" | databricks configure --token --profile QA   
         databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa 
 
         # Do this only if you use Databrics notebooks
@@ -56,9 +54,8 @@ jobs:
 
     - name: setup a PROD databricks cli config file
       run: |
-        echo "[PROD]
-        ${{ env.PROD_DATABRICKS_HOST}}
-        ${{ env.PROD_DATABRICKS_TOKEN }}">>~/.databrickscfg
+        echo "${{ env.PROD_DATABRICKS_HOST}}
+        ${{ env.PROD_DATABRICKS_TOKEN }}" | databricks configure --token --profile PROD
 
         databricks repos update --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main
         # Do this only if you use Databrics notebooks
