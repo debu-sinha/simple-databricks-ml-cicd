@@ -31,8 +31,9 @@ jobs:
         echo "host = ${{ secrets.DEV_DATABRICKS_HOST}}">> ~/.databrickscfg  # Add Dev workspace host to the profile
         echo "token = ${{ secrets.DEV_DATABRICKS_TOKEN }}">> ~/.databrickscfg   
         echo " " >> ~/.databrickscfg  # Add Dev workspace token to the profile        
-        
+        cat ~/.databrickscfg  # Verify the profile
         databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev
+
         # Do this only if you use Databrics notebooks
         # databricks workspace import_dir -o . /Workspace/Shared/DEV/${{ env.PROJECT_NAME}} --profile DEV  
 
@@ -46,7 +47,7 @@ jobs:
         echo "token = ${{ secrets.QA_DATABRICKS_TOKEN }}">>~/.databrickscfg   
         echo " " >>~/.databrickscfg  # Add Dev workspace token to the profile  
 
-        databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch QA
+        databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa
         # Do this only if you use Databrics notebooks
         #databricks workspace import_dir -o . /Workspace/Shared/QA/${{ env.PROJECT_NAME}} --profile QA # Import code to QA workspace
 
