@@ -31,29 +31,22 @@ jobs:
         pip install databricks-cli  # Install Databricks CLI
         databricks --version  # Verify the installation
         
-    - name: setup a dev databricks cli config file
+    - name: Update dev branch code
       run: |
         echo "${{ env.DEV_DATABRICKS_HOST}} 
         ${{ env.DEV_DATABRICKS_TOKEN }}" | databricks configure --token --profile DEV
-
-    - name: Dev Workspace Deployment
-      run: |
         databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev
 
         # Do this only if you use Databrics notebooks
         # databricks workspace import_dir -o . /Workspace/Shared/DEV/${{ env.PROJECT_NAME}} --profile DEV  
-
         # Additional commands for running Dev workspace tests, etc.
 
     - name: setup a qa databricks cli config file
       run: |
         echo "${{ env.QA_DATABRICKS_HOST}}
-        ${{ env.QA_DATABRICKS_TOKEN }}" | databricks configure --token --profile QA    
+        ${{ env.QA_DATABRICKS_TOKEN }}" | databricks configure --token --profile QA   
+        databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa 
 
-    - name: QA Workspace Deployment
-      run: |
-        databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa
-        
         # Do this only if you use Databrics notebooks
         #databricks workspace import_dir -o . /Workspace/Shared/QA/${{ env.PROJECT_NAME}} --profile QA # Import code to QA workspace
 
@@ -64,9 +57,9 @@ jobs:
         echo "${{ env.PROD_DATABRICKS_HOST}}
         ${{ env.PROD_DATABRICKS_TOKEN }}" | databricks configure --token --profile PROD  
 
-    - name: Prod Workspace Deployment
-      run: |
         databricks repos update --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main
         # Do this only if you use Databrics notebooks
         #databricks workspace import_dir -o . /Workspace/Shared/PROD/${{ env.PROJECT_NAME}} --profile PROD # Import code to Prod workspace
         # Additional commands for running Prod workspace tests, etc.
+        
+        
