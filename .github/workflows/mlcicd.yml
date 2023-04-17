@@ -38,28 +38,10 @@ jobs:
         host=${{ env.DEV_DATABRICKS_HOST}} 
         token=${{ env.DEV_DATABRICKS_TOKEN }}
         ">>~/.databrickscfg
-        
-        try() {
-          "$@"
-        }
-
-        # Define a function for the "catch" block
-        catch() {
-            echo "Command failed with exit status $?"
-            echo "Performing error handling or fallback action here"
-        }
 
         # Attempt the command
         databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/DEV/${{env.PROJECT_NAME}} --profile DEV
-        try databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev --profile DEV
-
-        # Check the exit status and call catch() if needed
-        if [ $? -ne 0 ]; then
-           databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev --profile DEV
-        fi
-
-
-        
+        databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev --profile DEV
 
         # Do this only if you use Databrics notebooks
         # databricks workspace import_dir -o . /Workspace/Shared/DEV/${{ env.PROJECT_NAME}} --profile DEV  
@@ -72,25 +54,10 @@ jobs:
         token=${{ env.QA_DATABRICKS_TOKEN }}
         ">>~/.databrickscfg   
         
-        try() {
-          "$@"
-        }
-
-        # Define a function for the "catch" block
-        catch() {
-            echo "Command failed with exit status $?"
-            echo "Performing error handling or fallback action here"
-        }
-
         # Attempt the command
     
         databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/QA/${{env.PROJECT_NAME}}  --profile QA
-        try databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa --profile QA
-
-        # Check the exit status and call catch() if needed
-        if [ $? -ne 0 ]; then
-           databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa --profile QA
-        fi
+        databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa --profile QA
 
         # Do this only if you use Databrics notebooks
         #databricks workspace import_dir -o . /Workspace/Shared/QA/${{ env.PROJECT_NAME}} --profile QA # Import code to QA workspace
@@ -104,25 +71,9 @@ jobs:
         token=${{ env.PROD_DATABRICKS_TOKEN }}
         ">>~/.databrickscfg
 
-
-        try() {
-          "$@"
-        }
-
-        # Define a function for the "catch" block
-        catch() {
-            echo "Command failed with exit status $?"
-            echo "Performing error handling or fallback action here"
-        }
-
         # Attempt the command
         databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/PROD/${{env.PROJECT_NAME}} --profile PROD
-        try databricks repos update --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main --profile PROD
-
-        # Check the exit status and call catch() if needed
-        if [ $? -ne 0 ]; then
-           databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main --profile PROD
-        fi
+        databricks repos update --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main --profile PROD
 
         # Do this only if you use Databrics notebooks
         #databricks workspace import_dir -o . /Workspace/Shared/PROD/${{ env.PROJECT_NAME}} --profile PROD # Import code to Prod workspace
