@@ -35,7 +35,8 @@ jobs:
       run: |
         echo "[DEV]
         ${{ env.DEV_DATABRICKS_HOST}} 
-        ${{ env.DEV_DATABRICKS_TOKEN }}">>~/.databrickscfg
+        ${{ env.DEV_DATABRICKS_TOKEN }}
+        ">>~/.databrickscfg
         
         databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev --profile DEV
 
@@ -47,7 +48,8 @@ jobs:
       run: |
         echo "[QA]
         ${{ env.QA_DATABRICKS_HOST}}
-        ${{ env.QA_DATABRICKS_TOKEN }}">>~/.databrickscfg   
+        ${{ env.QA_DATABRICKS_TOKEN }}
+        ">>~/.databrickscfg   
         
         databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa --profile QA
 
@@ -60,7 +62,8 @@ jobs:
       run: |
         echo "[PROD]
         ${{ env.PROD_DATABRICKS_HOST}}
-        ${{ env.PROD_DATABRICKS_TOKEN }}">>~/.databrickscfg
+        ${{ env.PROD_DATABRICKS_TOKEN }}
+        ">>~/.databrickscfg
 
         databricks repos update --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main --profile PROD
         # Do this only if you use Databrics notebooks
