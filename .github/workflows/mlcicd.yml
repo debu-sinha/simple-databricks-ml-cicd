@@ -82,6 +82,7 @@ jobs:
         }
 
         # Attempt the command
+        databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa --profile QA
         try databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa --profile QA
 
         # Check the exit status and call catch() if needed
@@ -119,7 +120,7 @@ jobs:
         if [ $? -ne 0 ]; then
            databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main --profile PROD
         fi
-        
+
         # Do this only if you use Databrics notebooks
         #databricks workspace import_dir -o . /Workspace/Shared/PROD/${{ env.PROJECT_NAME}} --profile PROD # Import code to Prod workspace
         # Additional commands for running Prod workspace tests, etc.
