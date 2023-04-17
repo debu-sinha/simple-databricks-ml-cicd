@@ -32,7 +32,7 @@ jobs:
         pip install databricks-cli # Install Databricks CLI
         databricks --version  # Verify the installation
         
-    - name: Update dev branch code
+    - name: Set up DEV repo if not exists in workspace
       run: |
         echo "[DEV]
         host=${{ env.DEV_DATABRICKS_HOST}} 
@@ -41,13 +41,17 @@ jobs:
 
         # Attempt the command
         databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/DEV/${{env.PROJECT_NAME}} --profile DEV
+      continue-on-error: true
+
+    - name: Update DEV
+      run: |   
         databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev --profile DEV
 
         # Do this only if you use Databrics notebooks
         # databricks workspace import_dir -o . /Workspace/Shared/DEV/${{ env.PROJECT_NAME}} --profile DEV  
         # Additional commands for running Dev workspace tests, etc.
 
-    - name: setup a qa databricks cli config file
+    - name: Set up QA repo if not exists in workspace
       run: |
         echo "[QA]
         host=${{ env.QA_DATABRICKS_HOST}}
@@ -55,8 +59,11 @@ jobs:
         ">>~/.databrickscfg   
         
         # Attempt the command
-    
         databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/QA/${{env.PROJECT_NAME}}  --profile QA
+      continue-on-error: true 
+    
+    - name: Update QA
+      run: |   
         databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa --profile QA
 
         # Do this only if you use Databrics notebooks
@@ -64,7 +71,7 @@ jobs:
 
         # Additional commands for running QA workspace tests, etc.
 
-    - name: setup a PROD databricks cli config file
+    - name: Set up PROD repo if not exists in workspace
       run: |
         echo "[PROD]
         host=${{ env.PROD_DATABRICKS_HOST}}
@@ -73,6 +80,10 @@ jobs:
 
         # Attempt the command
         databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/PROD/${{env.PROJECT_NAME}} --profile PROD
+      continue-on-error: true
+    
+    - name: Update PROD
+      run: |       
         databricks repos update --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main --profile PROD
 
         # Do this only if you use Databrics notebooks
