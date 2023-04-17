@@ -34,8 +34,8 @@ jobs:
     - name: Update dev branch code
       run: |
         echo "[DEV]
-        ${{ env.DEV_DATABRICKS_HOST}} 
-        ${{ env.DEV_DATABRICKS_TOKEN }}
+        host=${{ env.DEV_DATABRICKS_HOST}} 
+        token=${{ env.DEV_DATABRICKS_TOKEN }}
         ">>~/.databrickscfg
         
         databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev --profile DEV
@@ -47,8 +47,8 @@ jobs:
     - name: setup a qa databricks cli config file
       run: |
         echo "[QA]
-        ${{ env.QA_DATABRICKS_HOST}}
-        ${{ env.QA_DATABRICKS_TOKEN }}
+        host=${{ env.QA_DATABRICKS_HOST}}
+        token=${{ env.QA_DATABRICKS_TOKEN }}
         ">>~/.databrickscfg   
         
         databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa --profile QA
@@ -61,8 +61,8 @@ jobs:
     - name: setup a PROD databricks cli config file
       run: |
         echo "[PROD]
-        ${{ env.PROD_DATABRICKS_HOST}}
-        ${{ env.PROD_DATABRICKS_TOKEN }}
+        host=${{ env.PROD_DATABRICKS_HOST}}
+        token=${{ env.PROD_DATABRICKS_TOKEN }}
         ">>~/.databrickscfg
 
         databricks repos update --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main --profile PROD
