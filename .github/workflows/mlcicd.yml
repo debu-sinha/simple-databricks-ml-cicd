@@ -50,6 +50,7 @@ jobs:
         }
 
         # Attempt the command
+        databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev --profile DEV
         try databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev --profile DEV
 
         # Check the exit status and call catch() if needed
