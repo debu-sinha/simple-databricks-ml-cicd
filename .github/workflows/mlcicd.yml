@@ -50,7 +50,7 @@ jobs:
         }
 
         # Attempt the command
-        databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev --profile DEV
+        databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/DEV/${{env.PROJECT_NAME}} --profile DEV
         try databricks repos update --path /Repos/DEV/${{env.PROJECT_NAME}} --branch dev --profile DEV
 
         # Check the exit status and call catch() if needed
@@ -83,7 +83,8 @@ jobs:
         }
 
         # Attempt the command
-        databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa --profile QA
+    
+        databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/QA/${{env.PROJECT_NAME}}  --profile QA
         try databricks repos update --path /Repos/QA/${{env.PROJECT_NAME}} --branch qa --profile QA
 
         # Check the exit status and call catch() if needed
@@ -115,6 +116,7 @@ jobs:
         }
 
         # Attempt the command
+        databricks repos create --url  ${{env.GIT_URL}} --provider gitHub --path /Repos/PROD/${{env.PROJECT_NAME}} --profile PROD
         try databricks repos update --path /Repos/PROD/${{env.PROJECT_NAME}} --branch main --profile PROD
 
         # Check the exit status and call catch() if needed
